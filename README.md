@@ -1,4 +1,22 @@
-# Quickstart
+# Distributed Ridge
+
+## About
+
+This library uses GPUS to efficiently solve ridge regression on massive datasets
+
+## Benchmark
+
+$160$ GB dataset
+
+$365$ days * $100,000$ samples per day * ($1000$ d_in + $100$ d_out) * $4$ B per fp32
+
+sufficient statistics in $4.73$ seconds
+
+Solve $100,000$ times in closed form to find optimal lambda
+
+Processed λ values in $2.97$ seconds
+
+## Quickstart
 
 
 set config options in `distributed_ridge/config.py`
@@ -26,7 +44,3 @@ INFO:__main__:Current best λ: 384.74264526, MSE: -0.00000048
 INFO:__main__:Processed λ values in 0.22 seconds
 ```
 
-
-# About
-
-This library uses GPUS to efficiently solve ridge regression on massive datasets
