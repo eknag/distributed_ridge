@@ -32,7 +32,7 @@ torch.inverse(torch.ones((1, 1), device="cuda:0"))
 
 # --- Data generation configuration ---
 MAX_WORKERS = 16  # Maximum number of workers for ThreadPoolExecutor
-SAMPLES_PER_DAY = 100000  # Number of samples per day
+SAMPLES_PER_DAY = 10000  # Number of samples per day
 D_IN = 1000  # Number of input features
 D_OUT = 100  # Number of outputs
 REAL_WEIGHTS = torch.ones((D_IN, D_OUT), device=DEVICE, dtype=DTYPE) / (D_IN**0.5)
