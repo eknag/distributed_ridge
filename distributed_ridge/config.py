@@ -27,7 +27,7 @@ DTYPE = torch.float32
 torch.manual_seed(42)
 
 # just to initialize linalg module
-torch.inverse(torch.ones((1, 1), device="cuda:0"))
+torch.inverse(torch.ones((1, 1), device=DEVICE))
 
 
 # --- Data generation configuration ---
