@@ -64,18 +64,14 @@ def test_solve_ridge_batch_performance(sufficient_stats, solver, device):
         batch_size = 100
 
     start_time = time.time()
-    initial_memory = torch.cuda.memory_allocated(device) if device == "cuda" else 0
     for lambdas_batch, weights_batch in solve_ridge_batch(
         xTx, xTy, lambdas, solver=solver, batch_size=batch_size, device=device
     ):
         del lambdas_batch, weights_batch
 
     torch.cuda.synchronize()
-    torch.cuda.empty_cache()
-    final_memory = torch.cuda.memory_allocated(device) if device == "cuda" else 0
-    memory_diff = final_memory - initial_memory
-    print(f"Memory allocated after loop: {memory_diff / (1024**2):>7.2f} MB")
     end_time = time.time()
+    torch.cuda.empty_cache()
 
     elapsed_time = end_time - start_time
     print(
