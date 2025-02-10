@@ -5,11 +5,23 @@
 This library uses GPUS to efficiently solve ridge regression on massive datasets
 
 ## Profiling
+
+### batched eigen solve
+
+find optimal lambda seaching over 100,000 candidates.
+
+$160$ GB dataset
+$365$ days * $100,000$ samples per day * ($1000$ d_in + $100$ d_out) * $4$ B per fp32
+sufficient statistics in $4.73$ seconds
+Solve $100,000$ times in closed form to find optimal lambda
+Processed λ values in $2.97$ seconds
+
+
 Profiling results on AMD Ryzen 7 3700X 8-Core Processor with RTX 3080
 
 It shows EIGEN solver is the fastest in every case.
 
-### CUDA
+### CUDA Profiling other approaches
 Solver | D_OUT | D_OUT | DTYPE | DEVICE | RUNTIME (s) | Speedup
 -- | -- | -- | -- | -- | -- | --
 Solver.BASELINE | Dims[ 1000 | 1000] | torch.float32 | cuda | 2.96 | 1
