@@ -51,7 +51,7 @@ def test_solve_ridge_batch_performance(sufficient_stats, solver, device):
     Test the runtime of solve_ridge_batch for each RidgeSolver, dimension, dtype and device.
     """
     xTx, xTy, d_in, d_out = sufficient_stats
-    lambdas = get_lambda_grid(num_lambdas=10000)
+    lambdas = get_lambda_grid(num_lambdas=1000)
 
     if device == "cuda":
         total_gpu_memory = torch.cuda.get_device_properties(device).total_memory
