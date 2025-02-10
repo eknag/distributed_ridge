@@ -63,6 +63,8 @@ def test_solve_ridge_batch_performance(sufficient_stats, solver, device):
     else:
         batch_size = 100
 
+    initial_memory = torch.cuda.memory_allocated(device) if device == "cuda" else 0
+
     start_time = time.time()
     for lambdas_batch, weights_batch in solve_ridge_batch(
         xTx, xTy, lambdas, solver=solver, batch_size=batch_size, device=device
@@ -72,6 +74,8 @@ def test_solve_ridge_batch_performance(sufficient_stats, solver, device):
     torch.cuda.synchronize()
     end_time = time.time()
     torch.cuda.empty_cache()
+    final_memory = torch.cuda.memory_allocated(device) if device == "cuda" else 0
+    memory_diff = final_memory - initial_memory
 
     elapsed_time = end_time - start_time
     print(
@@ -83,3 +87,4 @@ def test_solve_ridge_batch_performance(sufficient_stats, solver, device):
     )
 
     assert elapsed_time > 0, f"Solver {solver.name} took non-positive time"
+    assert memory_diff == 0, f"Memory leak detected: {memory_diff} bytes"

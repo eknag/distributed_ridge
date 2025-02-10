@@ -55,6 +55,8 @@ def test_solver_matches_baseline(sufficient_stats, solver, device, dimensions):
     xTx, xTy, yTy = sufficient_stats
     lambdas = get_lambda_grid(num_lambdas=100)  # Smaller grid for testing
 
+    initial_memory = torch.cuda.memory_allocated(device) if device == "cuda" else 0
+
     # Get baseline results
     baseline_mses = []
     for lambdas_batch, weights_batch in solve_ridge_batch(
@@ -73,9 +75,6 @@ def test_solver_matches_baseline(sufficient_stats, solver, device, dimensions):
         solver_mses.append(mse_batch)
     solver_mses = torch.cat(solver_mses)
 
-    if device == "cuda":
-        torch.cuda.synchronize()
-
     # Compare results
     torch.testing.assert_close(
         solver_mses,
@@ -84,3 +83,10 @@ def test_solver_matches_baseline(sufficient_stats, solver, device, dimensions):
         atol=1e-4,
         msg=f"{solver.name} results do not match baseline (device={device}, d_in={dimensions['d_in']}, d_out={dimensions['d_out']})",
     )
+
+    if device == "cuda":
+        torch.cuda.synchronize()
+        torch.cuda.empty_cache()
+        final_memory = torch.cuda.memory_allocated(device)
+        memory_diff = final_memory - initial_memory
+        assert memory_diff == 0, f"Memory leak detected: {memory_diff} bytes"
