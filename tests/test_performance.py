@@ -59,7 +59,7 @@ def test_solve_ridge_batch_performance(sufficient_stats, solver, device):
         xTx_size = xTx.numel() * dtype_size
         xTy_size = xTy.numel() * dtype_size
         total_memory = xTx_size + xTy_size
-        batch_size = total_gpu_memory // (total_memory * 4)
+        batch_size = total_gpu_memory // (total_memory * 8)
     else:
         batch_size = 100
 
