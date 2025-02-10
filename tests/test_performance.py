@@ -71,9 +71,13 @@ def test_solve_ridge_batch_performance(sufficient_stats, solver, device):
     ):
         del lambdas_batch, weights_batch
 
-    torch.cuda.synchronize()
+    if device == "cuda":
+        torch.cuda.synchronize()
     end_time = time.time()
-    torch.cuda.empty_cache()
+
+    if device == "cuda":
+        torch.cuda.empty_cache()
+
     final_memory = torch.cuda.memory_allocated(device) if device == "cuda" else 0
     memory_diff = final_memory - initial_memory
 
